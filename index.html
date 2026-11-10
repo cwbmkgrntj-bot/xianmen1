@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#172b49"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="仙门灵田录">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>仙门灵田录</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101c30;color:#f8f4dc;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;user-select:none}
+.app{max-width:540px;margin:auto;min-height:100dvh;background:linear-gradient(#172b49,#253d5d 45%,#14243b);padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 4px}.brand{font-weight:900;font-size:20px;letter-spacing:1px;color:#f6d98b;text-shadow:0 2px 4px #000}.stats{display:flex;gap:8px;font-size:12px}.pill{background:#0d1b2d99;border:1px solid #7893b5;border-radius:20px;padding:6px 10px}
+.hero{height:190px;border-radius:18px;position:relative;overflow:hidden;background:linear-gradient(#76b8d7,#c6e7d8 55%,#7ba96b 56%,#416c51);border:2px solid #a5c5c8;box-shadow:0 8px 20px #0004}
+.sun{position:absolute;right:28px;top:22px;width:48px;height:48px;border-radius:50%;background:#ffe7a0;box-shadow:0 0 35px #ffe7a0}
+.mountain{position:absolute;bottom:50px;width:0;height:0;border-left:130px solid transparent;border-right:130px solid transparent;border-bottom:100px solid #648f9b}
+.m2{left:90px;border-bottom-color:#426f7d;transform:scale(.8)}.m1{left:-45px}.m3{right:-75px;border-bottom-color:#557d83}
+.temple{position:absolute;bottom:58px;left:50%;transform:translateX(-50%);font-size:48px;filter:drop-shadow(0 4px 2px #234)}
+.ground{position:absolute;bottom:0;height:58px;width:100%;background:#477b4b;border-top:4px solid #a5c87d}
+.player{position:absolute;bottom:34px;left:45%;font-size:30px;filter:drop-shadow(0 3px 2px #333)}
+.section{margin:12px 0;background:#17283dcc;border:1px solid #526e8e;border-radius:16px;padding:12px}
+h3{margin:0 0 10px;font-size:15px;color:#f5d98d}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plot{background:linear-gradient(#6a9c65,#3d7148);border:2px solid #b4d18b;border-radius:12px;min-height:82px;padding:7px 2px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:3px;font-size:12px}
+.plot .emoji{font-size:25px}.plot.ready{background:linear-gradient(#d5a64c,#8d6334);border-color:#ffe49a}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button{border:1px solid #d7bd7b;background:linear-gradient(#f4d99a,#c89a4d);color:#49321a;border-radius:12px;padding:12px 5px;font-size:14px;font-weight:700;box-shadow:0 3px 0 #75522b;cursor:pointer}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 #75522b}
+.nav{position:sticky;bottom:0;padding:10px 0 calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#14243be8;backdrop-filter:blur(8px)}
+.nav button{font-size:12px;padding:10px 2px}
+#toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%);background:#0d1b2ded;border:1px solid #e7c875;padding:10px 18px;border-radius:24px;display:none;z-index:9;white-space:nowrap}
+small{color:#c8d7e6}.install{font-size:12px;color:#dce8f4;line-height:1.6}
+</style></head><body><div class="app">
+<header><div class="brand">☯ 仙门灵田录</div><div class="stats"><span class="pill">💎 <b id="stone">120</b></span><span class="pill">✨ <b id="xp">0</b></span></div></header>
+<div class="hero"><div class="sun"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="temple">🏯</div><div class="ground"></div><div class="player">🧙</div></div>
+<div class="section"><h3>🌱 灵田 · 点击成熟灵植收获</h3><div class="fields" id="fields"></div><small>空地可播种；灵植成熟后点击收获。</small></div>
+<div class="section"><h3>🧭 修仙日常</h3><div class="actions"><button onclick="cultivate()">🧘 修炼 +10</button><button onclick="alchemy()">⚗️ 炼丹</button><button onclick="pet()">🦊 灵宠寻宝</button><button onclick="fashion()">👘 更换时装</button><button onclick="visit()">🪄 访友偷菜</button><button onclick="save()">💾 保存进度</button></div></div>
+<div class="section"><h3>📜 仙门状态</h3><div id="status">道友，欢迎回到灵田！</div></div>
+<div class="section install"><b>📲 添加到 iPhone 主屏幕</b><br>Safari 打开部署后的游戏网址 → 点击底部「分享」→「添加到主屏幕」→ 点击「添加」。<br><small>提示：必须通过 HTTPS 网站打开；直接点本地 HTML 文件不能安装 PWA。</small></div>
+<div class="nav"><button onclick="scrollTo(0,0)">🏠 仙府</button><button onclick="document.querySelector('.fields').scrollIntoView({behavior:'smooth'})">🌿 灵田</button><button onclick="alchemy()">⚗️ 炼丹</button><button onclick="fashion()">👘 时装</button></div></div><div id="toast"></div>
+<script>
+const crops=[{n:"灵稻",e:"🌾",t:12,v:18},{n:"仙桃",e:"🍑",t:20,v:30},{n:"聚灵草",e:"🌿",t:8,v:12},{n:"朱果",e:"🍒",t:25,v:45}];
+let data={stone:120,xp:0,plots:Array(9).fill(null),fashion:0};let outfits=["🧙","🧝","🥷","🧚","👨‍🚀"];
+try{let s=localStorage.getItem("xianmenPWA");if(s)data=JSON.parse(s)}catch(e){}
+function toast(s){let t=document.getElementById("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",1800)}
+function save(){localStorage.setItem("xianmenPWA",JSON.stringify(data));toast("进度已保存到本机")}
+function render(){document.getElementById("stone").textContent=data.stone;document.getElementById("xp").textContent=data.xp;document.querySelector(".player").textContent=outfits[data.fashion];let f=document.getElementById("fields");f.innerHTML="";data.plots.forEach((p,i)=>{let b=document.createElement("button");b.className="plot"+(p&&Date.now()>=p.end?" ready":"");if(!p)b.innerHTML='<span class="emoji">🟫</span><span>空灵田</span><small>点击播种</small>';else if(Date.now()>=p.end)b.innerHTML=`<span class="emoji">${p.e}</span><span>${p.n}</span><small>✨成熟 · 收获</small>`;else b.innerHTML=`<span class="emoji">🌱</span><span>${p.n}</span><small>生长中 ${Math.ceil((p.end-Date.now())/1000)}秒</small>`;b.onclick=()=>plot(i);f.appendChild(b)});}
+function plot(i){let p=data.plots[i];if(!p){let c=crops[Math.floor(Math.random()*crops.length)];data.plots[i]={...c,end:Date.now()+c.t*1000};toast("播种成功："+c.n);save()}else if(Date.now()>=p.end){data.stone+=p.v;data.xp+=5;data.plots[i]=null;toast("收获成功，获得灵石 "+p.v);save()}else toast("灵植还在生长哦");render()}
+function cultivate(){data.xp+=10;toast("修炼完成，修为 +10");save();render()}
+function alchemy(){if(data.stone<30){toast("灵石不足，炼丹需要30灵石");return}data.stone-=30;data.xp+=25;toast("炼制成功：聚气丹！修为 +25");save();render()}
+function pet(){let v=10+Math.floor(Math.random()*35);data.stone+=v;toast("灵狐寻宝带回 "+v+" 灵石");save();render()}
+function fashion(){data.fashion=(data.fashion+1)%outfits.length;toast("时装切换成功");save();render()}
+function visit(){toast("好友偷菜功能：联网云开发版本待接入");}
+setInterval(render,1000);render();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script></body></html>
